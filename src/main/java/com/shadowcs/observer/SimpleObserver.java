@@ -12,11 +12,17 @@ import java.nio.file.Paths;
 
 public class SimpleObserver extends S2ReplayObserver {
 
+    public static final int SPEED_NORMAL = 1;
+    public static final int SPEED_FASTER = 2;
+    public static final int SPEED_FASTEST = 4;
+    public static final int SPEED_LUDICROUS = 8;
+
+    private int speed;
     private long lastFrame;
 
     public static void main(String...args) throws IOException {
 
-        S2ReplayObserver observer = new SimpleObserver();
+        S2ReplayObserver observer = new SimpleObserver(SPEED_FASTER);
 
         var path = Paths.get("./replays").toAbsolutePath().toString();
 
@@ -24,7 +30,7 @@ public class SimpleObserver extends S2ReplayObserver {
                 .loadSettings(args)
                 .setProcessPath(Paths.get("C:\\Program Files (x86)\\StarCraft II\\Versions\\Base75689\\SC2_x64.exe"))
                 .setDataVersion("B89B5D6FA7CBF6452E721311BFBC6CB2")
-
+                //.setRealtime(true)
                 .addReplayObserver(observer)
                 .setReplayRecovery(true)
                 //.setReplayPath(Paths.get("./replays/")) // use your own folder of replays, they will go one after the other
@@ -45,7 +51,8 @@ public class SimpleObserver extends S2ReplayObserver {
 
     private CameraModuleObserver observer;
 
-    public SimpleObserver() {
+    public SimpleObserver(int speed) {
+        this.speed = speed;
         observer = new CameraModuleObserver(this);
     }
 
@@ -63,12 +70,10 @@ public class SimpleObserver extends S2ReplayObserver {
     public void onStep() {
         try {
 
-            control().observerAction()
-            observation();
             observation().getChatMessages();
             observer.onFrame();
             double delay = System.currentTimeMillis() - lastFrame;
-            double sleeptime = 1000.0 / (22.4 * 2);
+            double sleeptime = 1000.0 / (22.4 * speed);
 
             if((sleeptime - delay) > 0) {
                 Thread.sleep(Math.round(sleeptime - delay));
