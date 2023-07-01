@@ -2,8 +2,11 @@ plugins {
     id 'java'
 }
 
-group 'com.shadowcs.optimizer'
-version '0.0.1'
+group 'com.shadowcs.observer'
+version '1.0.0'
+
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
 
 configurations.all {
     resolutionStrategy {
@@ -38,12 +41,6 @@ dependencies {
     implementation (group: 'org.slf4j', name: 'slf4j-simple', version: '2.0.0-alpha7')
     testImplementation (group: 'org.slf4j', name: 'slf4j-simple', version: '2.0.0-alpha7')
 
-    implementation 'it.unimi.dsi:fastutil:8.5.6'
-
-    // GA stuff
-    implementation 'io.jenetics:jenetics:7.1.3'
-
-
     // Lombok Annotations
     compileOnly 'org.projectlombok:lombok:1.18.+'
     annotationProcessor 'org.projectlombok:lombok:1.18.+'
@@ -57,4 +54,25 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+jar {
+    archivesBaseName = "AutoObserver"
+
+    manifest {
+        attributes "Main-Class": "com.shadowcs.observer.SimpleObserver",
+                'Class-Path': configurations.runtimeClasspath.files.collect { "lib/$it.name" }.join(' ')
+    }
+}
+
+task zip(type: Zip) {
+    from jar
+
+    into('lib') {
+        from configurations.runtimeClasspath
+    }
+
+    from('replays') {
+        into 'replays'
+    }
 }
