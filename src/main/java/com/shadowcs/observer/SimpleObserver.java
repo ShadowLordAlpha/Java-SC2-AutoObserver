@@ -45,14 +45,16 @@ public class SimpleObserver extends S2ReplayObserver {
 
     public static void main(String...args) throws IOException {
 
-        CommandLine.populateCommand(replaySettings, args);
+        CommandLine cli = new CommandLine(replaySettings).setUnmatchedArgumentsAllowed(true);
+        cli.parse(args);
         CommandLine.usage(replaySettings, System.out);
+        String[] passArgs = cli.getUnmatchedArguments().toArray(new String[0]);
 
         S2ReplayObserver observer = new SimpleObserver(replaySettings.speed(), replaySettings.delay(), replaySettings.rotate(), replaySettings.production());
 
         File file = new File("./replays");
         S2Coordinator s2Coordinator = S2Coordinator.setup()
-                .loadSettings(args)
+                .loadSettings(passArgs)
                 //.setProcessPath(Paths.get("C:\\Program Files (x86)\\StarCraft II\\Versions\\Base75689\\SC2_x64.exe"))
                 .setDataVersion(replaySettings.data())
                 .addReplayObserver(observer)
