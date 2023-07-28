@@ -57,6 +57,7 @@ public class SimpleObserver extends S2ReplayObserver {
                 .loadSettings(passArgs)
                 //.setProcessPath(Paths.get("C:\\Program Files (x86)\\StarCraft II\\Versions\\Base75689\\SC2_x64.exe"))
                 .setDataVersion(replaySettings.data())
+                .setWindowSize(replaySettings.width(), replaySettings.height())
                 .addReplayObserver(observer)
                 .setReplayRecovery(true)
                 .setReplayPath(replaySettings.replayPath() == null ? file.getAbsoluteFile().toPath(): replaySettings.replayPath()) // use your own folder of replays, they will go one after the other

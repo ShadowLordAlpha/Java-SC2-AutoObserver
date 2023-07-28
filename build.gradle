@@ -3,7 +3,7 @@ plugins {
 }
 
 group 'com.shadowcs.observer'
-version '1.0.1'
+version '1.0.2'
 
 sourceCompatibility = JavaVersion.VERSION_17
 targetCompatibility = JavaVersion.VERSION_17
@@ -25,7 +25,7 @@ repositories {
 
 dependencies {
     // Not the best SC2 API but its the only one for Java so its what we are going to use
-    implementation ('com.github.ShadowLordAlpha.ocraft-s2client:ocraft-s2client-bot:Allow-Multiple-requests-of-same-type-SNAPSHOT') { changing = true }
+    implementation ('com.github.ShadowLordAlpha.ocraft-s2client:ocraft-s2client-bot:fullscreen-SNAPSHOT') { changing = true }
 
     // Object pool
     // implementation 'com.github.chrisvest:stormpot:3.2'

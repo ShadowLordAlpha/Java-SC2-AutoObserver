@@ -18,8 +18,12 @@ public final class ReplaySettings {
     private Integer delay;
     @CommandLine.Option(names = {"-ro", "--rotate"}, description = "How long between rotating between displaying different production values (ex: Income vs AMP vs Production).", defaultValue = "10000")
     private Integer rotate;
-    @CommandLine.Option(names = {"-to", "--toggle"}, description = "Path to a single SC2 replay or directory with replay files.", defaultValue = "true")
+    @CommandLine.Option(names = {"-to", "--toggle"}, description = "Should we start with the production tab active.", defaultValue = "true")
     private Boolean production;
+    @CommandLine.Option(names = {"-w", "--width"}, description = "The width our window should be", defaultValue = "300")
+    private Integer width;
+    @CommandLine.Option(names = {"-h", "--height"}, description = "The height our window should be", defaultValue = "300")
+    private Integer height;
 
     // TODO: do we eventually want to loop through overlay data?
 }
