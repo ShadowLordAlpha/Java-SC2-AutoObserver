@@ -156,9 +156,9 @@ public class SimpleObserver extends S2ReplayObserver {
         lastFrame = System.currentTimeMillis();
     }
 
-    @Override
+    /*@Override
     public boolean ignoreReplay(ReplayInfo replayInfo, int playerId) {
         System.out.println(replayInfo);
         return false;
-    }
+    }*/
 }

@@ -59,6 +59,9 @@ public abstract class CameraModule {
     protected UnitInPool cameraFocusUnit;
     protected boolean followUnit;
 
+    protected int currentSteps = 0;
+    protected int maxSteps = 110;
+
     public CameraModule(S2ReplayObserver bot) {
         m_initialized(false);
         m_client(bot);
@@ -280,14 +283,23 @@ public abstract class CameraModule {
         // We only do smooth movement, if the focus is nearby.
         double dist = dist(currentCameraPosition, cameraFocusPosition);
         if (dist > cameraJumpThreshold) {
+            System.out.println("Moving Camera JUMP");
             currentCameraPosition = cameraFocusPosition;
+            currentSteps = 0;
         } else if (dist > 0.1f) {
+            System.out.println("Moving Camera Smooth");
+
+            float blend = (float) Math.sin((Math.PI / 2) * currentSteps++ / maxSteps);
+
             currentCameraPosition = currentCameraPosition.add(Point2d.of(
-                moveFactor*(cameraFocusPosition.getX() - currentCameraPosition.getX()),
-                moveFactor*(cameraFocusPosition.getY() - currentCameraPosition.getY())));
+                    blend * (moveFactor*(cameraFocusPosition.getX() - currentCameraPosition.getX())),
+                    blend * (moveFactor*(cameraFocusPosition.getY() - currentCameraPosition.getY()))));
         } else {
+            System.out.println("No position to go to");
+            currentSteps = 0;
             return;
         }
+
         if (isValidPos(currentCameraPosition)) {
             updateCameraPositionExcecute();
         }
@@ -298,6 +310,7 @@ public abstract class CameraModule {
         boolean isTimeToMoveIfHigherPrio = elapsedFrames >= cameraMoveTimeMin;
         boolean isHigherPrio = lastMovedPriority < priority || (followUnit && !cameraFocusUnit.isAlive());
         // camera should move IF: enough time has passed OR (minimum time has passed AND new prio is higher)
+        System.out.println("Movement request: " + isTimeToMove + " calc: " + isHigherPrio + " && " + isTimeToMoveIfHigherPrio);
         return isTimeToMove || (isHigherPrio && isTimeToMoveIfHigherPrio);
     }
 
@@ -318,7 +331,11 @@ public abstract class CameraModule {
      * @return
      */
     protected boolean isNearOwnStartLocation(Point2d pos, int player) {
-        return dist(pos, m_startLocations.get(player)) < nearStartLocationDistance;
+        try {
+            return dist(pos, m_startLocations.get(player)) < nearStartLocationDistance;
+        } catch (Exception e) {
+            return true; // if we don't know or have some issue assume we are
+        }
     }
 
     /**
