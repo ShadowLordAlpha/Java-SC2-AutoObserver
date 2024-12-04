@@ -3,20 +3,10 @@ plugins {
 }
 
 group 'com.shadowcs.observer'
-version '1.0.4'
+version '1.0.5'
 
 sourceCompatibility = JavaVersion.VERSION_17
 targetCompatibility = JavaVersion.VERSION_17
-
-configurations.all {
-    resolutionStrategy {
-
-        // cache dynamic versions for 30 minutes
-        cacheDynamicVersionsFor 30 * 60, 'seconds'
-        // don't cache changing modules at all
-        cacheChangingModulesFor 0, 'seconds'
-    }
-}
 
 repositories {
     mavenCentral()
@@ -25,9 +15,9 @@ repositories {
 
 dependencies {
     // Not the best SC2 API but its the only one for Java so its what we are going to use
-    implementation 'com.github.ocraft:ocraft-s2client-bot:+'
+    implementation ('com.github.ShadowLordAlpha.ocraft-s2client:ocraft-s2client-bot:master-SNAPSHOT') { changing = true }
 
-    // Fast caching stuff for java
+// Fast caching stuff for java
     implementation 'com.github.ben-manes.caffeine:caffeine:3.1.1'
     // Optional extensions
     implementation 'com.github.ben-manes.caffeine:guava:3.1.1'
